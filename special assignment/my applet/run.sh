@@ -2,4 +2,4 @@
 
 javac *.java
 appletviewer test.html
-appletviewer grid.html
+appletviewer rect.html
