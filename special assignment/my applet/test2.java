@@ -1,5 +1,4 @@
 import xyz.rect;
-import java.applet.*;
 import java.awt.*;
 
 public class test2 extends rect {
