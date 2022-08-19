@@ -5,6 +5,8 @@ import java.awt.event.*;
 public class grid extends Applet implements MouseListener, MouseMotionListener, ActionListener {
     Button button1, button2;
     int offset;
+    int originX;
+    int originY;
 
     public void init() {
         button1 = new Button("Zoom out");
@@ -16,8 +18,8 @@ public class grid extends Applet implements MouseListener, MouseMotionListener, 
         offset = 40;
         addMouseListener(this);
         addMouseMotionListener(this);
-        this.setSize(new Dimension(600, 800));
-
+        originX = (getX() + getWidth()) / 2;
+        originY = (getY() + getHeight()) / 2;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -83,20 +85,57 @@ public class grid extends Applet implements MouseListener, MouseMotionListener, 
 
     public void paint(Graphics g) {
         g.setColor(Color.red);
-        int originX = (getX() + getWidth()) / 2;
-        int originY = (getX() + getHeight()) / 2;
         Font f = new Font("Nano", 4, 24);
         g.drawLine(-getWidth() + originX, 0 + originY, getWidth() + originX, 0 + originY);
         g.drawLine(0 + originX, -getHeight() + originY, 0 + originX, getHeight() + originY);
         g.drawString("(0,0)", originX, originY);
         g.setColor(Color.black);
-        for (int i = 1; i <= getWidth(); i++) {
-            g.drawLine(-getWidth() + originX, offset * i + originY, getWidth() + originX, offset * i + originY);
-            g.drawLine(-getWidth() + originX, -offset * i + originY, getWidth() + originX, -offset * i + originY);
-            g.drawLine(offset * i + originX, -getHeight() + originY, offset * i + originX, getHeight() + originY);
-            g.drawLine(-1 * offset * i + originX, -getHeight() + originY, -1 * offset * i + originX,
-                    getHeight() + originY);
+        int yCoord = 0;
+        for (int i = originX; i < originX * 2 + getWidth(); i += offset) {
+            g.setColor(Color.DARK_GRAY);
+            g.drawLine(i, originY * 2 - getHeight(), i, originY * 2 + getHeight());
+            if (offset > 30 && i != originX) {
+                g.drawString(String.valueOf(-1 * yCoord), i - 15, originY + 15);
+
+            }
+            yCoord--;
         }
+        yCoord = 0;
+        for (int i = originX; i > originX * 2 - getWidth(); i -= offset) {
+            g.setColor(Color.DARK_GRAY);
+            g.drawLine(i, originY * 2 - getHeight(), i, originY * 2 + getHeight());
+            if (offset > 30 && i != originX) {
+                g.drawString(String.valueOf(-1 * yCoord), i - 15, originY + 15);
+
+            }
+            yCoord++;
+        }
+
+        int xCoord = 0;
+        for (int i = originY; i < originY * 2 + getHeight(); i += offset) {
+            g.setColor(Color.DARK_GRAY);
+            g.drawLine(originX * 2 - getWidth(), i, originX * 2 + getWidth(), i);
+            if (offset > 30 && i != originY) {
+                g.drawString(String.valueOf(-1 * xCoord), originX + 10, i + 15);
+            }
+            xCoord++;
+
+        }
+        xCoord = 0;
+        for (int i = originY; i > originY * 2 - getHeight(); i -= offset) {
+            g.setColor(Color.DARK_GRAY);
+            g.drawLine(originX * 2 - getWidth(), i, originX * 2 + getWidth(), i);
+            if (offset > 30 && i != originY) {
+                g.drawString(String.valueOf(-1 * xCoord), originX + 10, i + 15);
+            }
+            xCoord--;
+        }
+        plotPoint(1, 2, Color.BLUE, g);
+    }
+
+    public void plotPoint(int x, int y, Color c, Graphics g) {
+        g.setColor(c);
+        g.fillOval(originX + x * offset - offset / 8, originY - y * (offset) - offset / 8, offset / 4, offset / 4);
     }
 
 }
