@@ -2,7 +2,7 @@ import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class grid extends Applet implements MouseListener, MouseMotionListener, ActionListener {
+public class gridext extends Applet implements MouseListener, MouseMotionListener, ActionListener {
     Button button1, button2;
     int offset;
     int originX;
@@ -131,7 +131,7 @@ public class grid extends Applet implements MouseListener, MouseMotionListener, 
             }
             xCoord--;
         }
-        plotPoint(9, 2, Color.BLUE, g);
+        plotPoint(1, 2, Color.BLUE, g);
     }
 
     public void plotPoint(int x, int y, Color c, Graphics g) {
