@@ -1,39 +1,65 @@
-import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
 
-public class dda extends Applet implements MouseListener, MouseMotionListener, ActionListener {
-    public Button button1, button2;
+public class dda1 extends Canvas implements MouseListener, MouseMotionListener, ActionListener {
+    public JButton button1, button2;
     public int offset;
     public int originX;
     public int originY;
-    protected TextField t1, t2, t3, t4;
+    protected JTextField t1, t2, t3, t4;
 
-    public void init() {
-        button1 = new Button("Zoom out");
-        add(button1);
+    public dda1(JFrame frame) {
+        button1 = new JButton("Zoom out");
+        button1.setPreferredSize(new Dimension(30, 30));
+        // button1.setBounds(50, 100, 50, 30);
         button1.addActionListener(this);
-        button2 = new Button("Zoom in");
-        add(button2);
+        button2 = new JButton("Zoom in");
+        button2.setPreferredSize(new Dimension(30, 30));
+        // button2.setBounds(100, 100, 95, 30);
         button2.addActionListener(this);
         offset = 40;
         addMouseListener(this);
         addMouseMotionListener(this);
-        originX = (getX() + getWidth()) / 2;
-        originY = (getY() + getHeight()) / 2;
+        originX = (frame.getX() + frame.getWidth()) / 2;
+        originY = (frame.getY() + frame.getHeight()) / 2;
         this.setSize(new Dimension(1920, 980));
-        t1 = new TextField("10");
-        t2 = new TextField("10");
-        t3 = new TextField("10");
-        t4 = new TextField("10");
+        t1 = new JTextField("10");
+        t2 = new JTextField("10");
+        t3 = new JTextField("10");
+        t4 = new JTextField("10");
         t1.setText("0");
         t2.setText("0");
         t3.setText("8");
         t4.setText("8");
-        add(t1);
-        add(t2);
-        add(t3);
-        add(t4);
+        // the panel for buttons
+        frame.add(new MenuPane(button1, button2, t1, t2, t3, t4));
+    }
+
+    public class MenuPane extends JPanel {
+
+        public MenuPane(JButton button1, JButton button2, JTextField t1, JTextField t2, JTextField t3, JTextField t4) {
+            setBorder(new EmptyBorder(10, 10, 10, 10));
+            setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+
+            JPanel buttons = new JPanel(new BoxLayout(this, BoxLayout.LINE_AXIS));
+            buttons.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+            buttons.add(Box.createHorizontalGlue());
+            buttons.add(button1);
+            buttons.add(Box.createRigidArea(new Dimension(10, 0)));
+            buttons.add(button2);
+            buttons.add(Box.createRigidArea(new Dimension(10, 0)));
+            buttons.add(t1);
+            buttons.add(Box.createRigidArea(new Dimension(10, 0)));
+            buttons.add(t2);
+            buttons.add(Box.createRigidArea(new Dimension(10, 0)));
+            buttons.add(t3);
+            buttons.add(Box.createRigidArea(new Dimension(10, 0)));
+            buttons.add(t4);
+            add(buttons);
+        }
+
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -108,6 +134,7 @@ public class dda extends Applet implements MouseListener, MouseMotionListener, A
         g.drawLine(0 + originX, -getHeight() + originY, 0 + originX, getHeight() + originY);
         g.drawString("(0,0)", originX, originY);
         g.setColor(Color.black);
+        System.out.println(originX + " " + originY);
         int yCoord = 0;
         for (int i = originX; i < originX * 2 + getWidth(); i += offset) {
             g.setColor(Color.DARK_GRAY);
@@ -191,6 +218,17 @@ public class dda extends Applet implements MouseListener, MouseMotionListener, A
             plotPoint((int) Math.round(x), (int) Math.round(y), Color.yellow, g);
         }
 
+    }
+
+    public static void main(String args[]) {
+        JFrame f = new JFrame();
+        f.setSize(1920, 980);
+        dda1 obj = new dda1(f);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setLayout(null);
+        f.add(obj);
+        f.setVisible(true);
+        f.validate();
     }
 
 }
