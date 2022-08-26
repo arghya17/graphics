@@ -2,7 +2,7 @@ import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class dda extends Applet implements MouseListener, MouseMotionListener, ActionListener {
+public class bresenhams extends Applet implements MouseListener, MouseMotionListener, ActionListener {
     public Button button1, button2;
     public int offset;
     public int originX;
@@ -176,22 +176,6 @@ public class dda extends Applet implements MouseListener, MouseMotionListener, A
         double stepx;
         double stepy;
         int n = 0;
-        if (Math.abs(dx) > Math.abs(dy)) {
-            stepx = dx / Math.abs(dx);
-            stepy = (double) dy / Math.abs(dx);
-            n = Math.abs(dx);
-        } else {
-            stepx = (double) dx / Math.abs(dy);
-            stepy = dy / Math.abs(dy);
-            n = Math.abs(dy);
-        }
-        int i = 0;
-        double x, y;
-        for (i = 0; i <= n; i++) {
-            x = x1 + i * stepx;
-            y = y1 + i * stepy;
-            plotPoint((int) Math.round(x), (int) Math.round(y), Color.yellow, g);
-        }
 
     }
 

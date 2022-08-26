@@ -20,7 +20,7 @@ public class grid extends Applet implements MouseListener, MouseMotionListener, 
         addMouseMotionListener(this);
         originX = (getX() + getWidth()) / 2;
         originY = (getY() + getHeight()) / 2;
-        this.setSize(new Dimension(1920, 980));
+        this.setSize(new Dimension(1400, 540));
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -85,6 +85,8 @@ public class grid extends Applet implements MouseListener, MouseMotionListener, 
     }
 
     public void paint(Graphics g) {
+        originX = (getX() + getWidth()) / 2;
+        originY = (getY() + getHeight()) / 2;
         g.setColor(Color.red);
         Font f = new Font("Nano", 4, 24);
         g.drawLine(-getWidth() + originX, 0 + originY, getWidth() + originX, 0 + originY);
@@ -131,7 +133,7 @@ public class grid extends Applet implements MouseListener, MouseMotionListener, 
             }
             xCoord--;
         }
-        plotPoint(9, 2, Color.BLUE, g);
+        plotPoint(0, 0, Color.green, g);
     }
 
     public void plotPoint(int x, int y, Color c, Graphics g) {

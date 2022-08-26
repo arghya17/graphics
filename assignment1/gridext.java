@@ -85,6 +85,8 @@ public class gridext extends Applet implements MouseListener, MouseMotionListene
     }
 
     public void paint(Graphics g) {
+        originX = (getX() + getWidth()) / 2;
+        originY = (getY() + getHeight()) / 2;
         g.setColor(Color.red);
         Font f = new Font("Nano", 4, 24);
         g.drawLine(-getWidth() + originX, 0 + originY, getWidth() + originX, 0 + originY);
