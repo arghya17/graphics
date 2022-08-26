@@ -2,7 +2,7 @@ import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class bresenhams extends Applet implements MouseListener, MouseMotionListener, ActionListener {
+public class midpoint extends Applet implements MouseListener, MouseMotionListener, ActionListener {
     public Button button1, button2;
     public int offset;
     public int originX;
@@ -173,8 +173,13 @@ public class bresenhams extends Applet implements MouseListener, MouseMotionList
     public void drawline(int x1, int y1, int x2, int y2, Graphics g) {
         int dx = x2 - x1;
         int dy = y2 - y1;
-        int p = 2 * dx - dy;
+        double p;
         double slope = dy / (double) dx;
+        if (Math.abs(slope) <= 1) {
+            p = 0.5 - slope;
+        } else {
+            p = 1 - slope / 2.0;
+        }
         int x, y;
         x = x1;
         y = y1;
@@ -184,24 +189,24 @@ public class bresenhams extends Applet implements MouseListener, MouseMotionList
             if (Math.abs(slope) <= 1) {
                 if (p >= 0) {
                     x = x + 1;
-                    y = y + 1;
                     plotPoint(x, y, c, g);
-                    p = p + 2 * dy - 2 * dx;
+                    p = p - slope;
                 } else {
                     x = x + 1;
+                    y = y + 1;
                     plotPoint(x, y, c, g);
-                    p = p + 2 * dy;
+                    p = p - slope + 1;
                 }
             } else {
                 if (p >= 0) {
                     x = x + 1;
                     y = y + 1;
                     plotPoint(x, y, c, g);
-                    p = p + 2 * dx - 2 * dy;
+                    p = p - slope + 1;
                 } else {
                     y = y + 1;
                     plotPoint(x, y, c, g);
-                    p = p + 2 * dx;
+                    p = p + 1;
                 }
             }
         }
