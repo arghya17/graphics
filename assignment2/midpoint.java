@@ -185,7 +185,7 @@ public class midpoint extends Applet implements MouseListener, MouseMotionListen
         y = y1;
         Color c = Color.yellow;
         plotPoint(x, y, c, g);
-        while (x < x2 && y < y2) {
+        while ((x <= x2 && y <= y2)) {
             if (Math.abs(slope) <= 1) {
                 if (p >= 0) {
                     x = x + 1;

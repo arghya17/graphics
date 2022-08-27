@@ -1,14 +1,15 @@
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Random;
 
-public class bresenhams extends Applet implements MouseListener, MouseMotionListener, ActionListener {
-    public Button button1, button2;
+public class light extends Applet implements MouseListener, MouseMotionListener, ActionListener {
+    public Button button1, button2, button3;
     public int offset;
     public int originX;
     public int originY;
     protected TextField t1, t2, t3, t4;
-    Graphics g;
+    boolean flameon;
 
     public void init() {
         button1 = new Button("Zoom out");
@@ -17,6 +18,9 @@ public class bresenhams extends Applet implements MouseListener, MouseMotionList
         button2 = new Button("Zoom in");
         add(button2);
         button2.addActionListener(this);
+        button3 = new Button("Toggle flame");
+        add(button3);
+        button3.addActionListener(this);
         offset = 40;
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -35,6 +39,7 @@ public class bresenhams extends Applet implements MouseListener, MouseMotionList
         add(t2);
         add(t3);
         add(t4);
+        flameon = true;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -45,13 +50,16 @@ public class bresenhams extends Applet implements MouseListener, MouseMotionList
             } else if (offset - 1 > 0) {
                 offset = offset - 1;
             }
-        } else {
+        } else if (e.getSource() == button2) {
             if (offset < 10) {
                 offset = 10;
             } else if (offset + 10 <= 80) {
                 offset = offset + 10;
             }
             System.out.println("Zoom in is pressed");
+        } else {
+            System.out.print("Toggle button is pressed");
+            flameon = !flameon;
         }
         repaint();
     }
@@ -100,6 +108,16 @@ public class bresenhams extends Applet implements MouseListener, MouseMotionList
 
     public void mouseClicked(MouseEvent m) {
         repaint();
+    }
+
+    void drawCandle(Graphics g, int height, int width, int x, int y) {
+        Color c = Color.gray;
+        while (height >= 0) {
+            for (int i = 0; i <= width; i++) {
+                plotPoint(x + i, y - height, c, g);
+            }
+            height -= 1;
+        }
     }
 
     public void paint(Graphics g) {
@@ -151,17 +169,75 @@ public class bresenhams extends Applet implements MouseListener, MouseMotionList
             }
             xCoord--;
         }
-        int x1, y1, x2, y2;
+        int x1, y1;
         x1 = Integer.parseInt(t1.getText());
         y1 = Integer.parseInt(t2.getText());
-        x2 = Integer.parseInt(t3.getText());
-        y2 = Integer.parseInt(t4.getText());
+        int height = Integer.parseInt(t3.getText());
+        int width = Integer.parseInt(t4.getText());
         // System.out.println("Enter 2 endpoints of the line segment");
         // x1 = sc.nextInt();
         // y1 = sc.nextInt();
         // x2 = sc.nextInt();
-        // y2 = sc.nextInt();
-        drawline(x1, y1, x2, y2, g);
+        // y2 = sc.nextInt()
+        drawCandle(g, height, width, x1, y1);
+        if (flameon) {
+            lightCandle(g, height, width, x1, y1);
+        }
+    }
+
+    void lightCandle(Graphics g, int height, int width, int x, int y) {
+        int centrex = x + width / 2;
+        Color c = Color.red;
+        int maxheight = height / 2;
+        if (width >= height || height - width < maxheight) {
+            maxheight = height;
+        }
+        int i = 1;
+        int x1, y1;
+        x1 = centrex;
+        y1 = y;
+        int px = -1;
+        int py = 1;
+        while (i > 0) {
+            x1 = x1 + i * px;
+            y1 = y1 + i * py;
+            if (x1 <= x) {
+                px = 1;
+                x1 = x;
+            }
+            if (x1 >= x + width) {
+                px = -1;
+                x1 = x + width;
+            }
+            if (y1 >= maxheight) {
+                py = -1;
+            }
+            if (py >= 1) {
+                i = i + 1;
+            } else {
+                i = i - 1;
+            }
+            System.out.println(i + " " + x1 + " " + y1 + " " + centrex + " " + y);
+            drawline(x1, y1, centrex, y, g);
+            // if (y1 - 2 > y) {
+            // drawline(x1, y1 - 2, centrex, y, g);
+            // }
+            // if (y1 - 3 > y) {
+            // drawline(x1, y1 - 3, centrex, y, g);
+            // }
+            // if (y1 + 2 < maxheight) {
+            // drawline(x1, y1 + 2, centrex, y, g);
+            // }
+            // if (x1 - 1 > x) {
+            // drawline(x1 - 1, y1 + 1, centrex, y, g);
+            // }
+            // if (x1 - 2 > x) {
+            // drawline(x1 - 2, y1 + 1, centrex, y, g);
+            // }
+            // if (x1 - 3 > x) {
+            // drawline(x1 - 2, y1 + 1, centrex, y, g);
+            // }
+        }
     }
 
     public void plotPoint(int x, int y, Color c, Graphics g) {
@@ -174,37 +250,24 @@ public class bresenhams extends Applet implements MouseListener, MouseMotionList
     public void drawline(int x1, int y1, int x2, int y2, Graphics g) {
         int dx = x2 - x1;
         int dy = y2 - y1;
-        int p = 2 * dx - dy;
-        double slope = dy / (double) dx;
-        int x, y;
-        x = x1;
-        y = y1;
-        Color c = Color.yellow;
-        plotPoint(x, y, c, g);
-        while ((x < x2) || (y <= y2)) {
-            if (Math.abs(slope) <= 1) {
-                if (p >= 0) {
-                    x = x + 1;
-                    y = y + 1;
-                    plotPoint(x, y, c, g);
-                    p = p + 2 * dy - 2 * dx;
-                } else {
-                    x = x + 1;
-                    plotPoint(x, y, c, g);
-                    p = p + 2 * dy;
-                }
-            } else {
-                if (p >= 0) {
-                    x = x + 1;
-                    y = y + 1;
-                    plotPoint(x, y, c, g);
-                    p = p + 2 * dx - 2 * dy;
-                } else {
-                    y = y + 1;
-                    plotPoint(x, y, c, g);
-                    p = p + 2 * dx;
-                }
-            }
+        double stepx;
+        double stepy;
+        int n = 0;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            stepx = dx / Math.abs(dx);
+            stepy = (double) dy / Math.abs(dx);
+            n = Math.abs(dx);
+        } else {
+            stepx = (double) dx / Math.abs(dy);
+            stepy = dy / Math.abs(dy);
+            n = Math.abs(dy);
+        }
+        int i = 0;
+        double x, y;
+        for (i = 0; i <= n; i++) {
+            x = x1 + i * stepx;
+            y = y1 + i * stepy;
+            plotPoint((int) Math.round(x), (int) Math.round(y), Color.red, g);
         }
 
     }
