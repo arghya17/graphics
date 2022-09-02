@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
 
+import javax.lang.model.util.ElementScanner6;
+
 public class light extends Applet implements MouseListener, MouseMotionListener, ActionListener {
     public Button button1, button2, button3;
     public int offset;
@@ -196,53 +198,41 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         int x1, y1;
         x1 = centrex;
         y1 = y;
-        int px = -1;
-        int py = 1;
-        while (i > 0) {
-            x1 = x1 + i * px;
-            y1 = y1 + i * py;
-            if (x1 <= x) {
-                px = 1;
-                x1 = x;
-            }
+        int px = 1;
+        int py = 2;
+        int p = -1;
+        while (true) {
+            x1 = x1 + px;
+            y1 = y1 + py;
             if (x1 >= x + width) {
+
                 px = -1;
-                x1 = x + width;
             }
-            if (y1 >= maxheight) {
-                py = -1;
-            }
-            if (py >= 1) {
-                i = i + 1;
+            if (px > 0) {
+                p = p + 1;
             } else {
-                i = i - 1;
+                p = p - 1;
             }
-            System.out.println(i + " " + x1 + " " + y1 + " " + centrex + " " + y);
-            drawline(x1, y1, centrex, y, g);
-            // if (y1 - 2 > y) {
-            // drawline(x1, y1 - 2, centrex, y, g);
-            // }
-            // if (y1 - 3 > y) {
-            // drawline(x1, y1 - 3, centrex, y, g);
-            // }
-            // if (y1 + 2 < maxheight) {
-            // drawline(x1, y1 + 2, centrex, y, g);
-            // }
-            // if (x1 - 1 > x) {
-            // drawline(x1 - 1, y1 + 1, centrex, y, g);
-            // }
-            // if (x1 - 2 > x) {
-            // drawline(x1 - 2, y1 + 1, centrex, y, g);
-            // }
-            // if (x1 - 3 > x) {
-            // drawline(x1 - 2, y1 + 1, centrex, y, g);
-            // }
+            int j = 2 * centrex - x1;
+            while (j <= x1) {
+                drawline(j, y1, centrex, y, g);
+                if (y1 != maxheight) {
+                    drawline(j - 1, y1, centrex, y, g);
+                    drawline(j + 1, y1, centrex, y, g);
+                }
+                j += 1;
+                System.out.println(j + " " + x1 + " " + y1);
+            }
+            if (x1 == centrex) {
+                break;
+            }
+            i += 1;
         }
     }
 
     public void plotPoint(int x, int y, Color c, Graphics g) {
         g.setColor(c);
-        int incradius = 20;
+        int incradius = 100;
         g.fillOval(originX + x * offset - (offset + incradius) / 8, originY - y * (offset) - (offset + incradius) / 8,
                 (offset + incradius) / 4, (offset + incradius) / 4);
     }
@@ -267,7 +257,13 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         for (i = 0; i <= n; i++) {
             x = x1 + i * stepx;
             y = y1 + i * stepy;
-            plotPoint((int) Math.round(x), (int) Math.round(y), Color.red, g);
+            if (i < n / 3) {
+                plotPoint((int) Math.round(x), (int) Math.round(y), Color.red, g);
+            } else if (i >= n / 3 && i < 2 * n / 3) {
+                plotPoint((int) Math.round(x), (int) Math.round(y), Color.orange, g);
+            } else {
+                plotPoint((int) Math.round(x), (int) Math.round(y), Color.yellow, g);
+            }
         }
 
     }

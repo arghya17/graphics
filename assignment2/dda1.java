@@ -13,18 +13,17 @@ public class dda1 extends Canvas implements MouseListener, MouseMotionListener, 
     public dda1(JFrame frame) {
         button1 = new JButton("Zoom out");
         button1.setPreferredSize(new Dimension(30, 30));
-        // button1.setBounds(50, 100, 50, 30);
+        button1.setBounds(50, 100, 50, 30);
         button1.addActionListener(this);
         button2 = new JButton("Zoom in");
         button2.setPreferredSize(new Dimension(30, 30));
-        // button2.setBounds(100, 100, 95, 30);
+        button2.setBounds(100, 100, 95, 30);
         button2.addActionListener(this);
         offset = 40;
         addMouseListener(this);
         addMouseMotionListener(this);
         originX = (frame.getX() + frame.getWidth()) / 2;
         originY = (frame.getY() + frame.getHeight()) / 2;
-        this.setSize(new Dimension(1920, 980));
         t1 = new JTextField("10");
         t2 = new JTextField("10");
         t3 = new JTextField("10");
@@ -33,8 +32,9 @@ public class dda1 extends Canvas implements MouseListener, MouseMotionListener, 
         t2.setText("0");
         t3.setText("8");
         t4.setText("8");
+        this.setSize(new Dimension(1920, 1080));
         // the panel for buttons
-        frame.add(new MenuPane(button1, button2, t1, t2, t3, t4));
+        // frame.add(new MenuPane(button1, button2, t1, t2, t3, t4));
     }
 
     public class MenuPane extends JPanel {
@@ -127,7 +127,16 @@ public class dda1 extends Canvas implements MouseListener, MouseMotionListener, 
         repaint();
     }
 
+    @Override
+    public void validate() {
+        super.validate();
+
+    };
+
     public void paint(Graphics g) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        originX = (int) (screenSize.getWidth()) / 2;
+        originY = (int) (screenSize.getHeight()) / 2;
         g.setColor(Color.red);
         Font f = new Font("Nano", 4, 24);
         g.drawLine(-getWidth() + originX, 0 + originY, getWidth() + originX, 0 + originY);
@@ -222,8 +231,9 @@ public class dda1 extends Canvas implements MouseListener, MouseMotionListener, 
 
     public static void main(String args[]) {
         JFrame f = new JFrame();
-        f.setSize(1920, 980);
         dda1 obj = new dda1(f);
+        f.setSize(new Dimension(1920, 1080));
+        f.setMinimumSize(new Dimension(300, 300));
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setLayout(null);
         f.add(obj);
