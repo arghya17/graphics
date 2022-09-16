@@ -1,10 +1,9 @@
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Random;
 
-public class light extends Applet implements MouseListener, MouseMotionListener, ActionListener {
-    public Button button1, button2, button3;
+public class circle extends Applet implements MouseListener, MouseMotionListener, ActionListener {
+    public Button button1, button2;
     public int offset;
     public int originX;
     public int originY;
@@ -17,9 +16,6 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         button2 = new Button("Zoom in");
         add(button2);
         button2.addActionListener(this);
-        button3 = new Button("Toggle flame");
-        add(button3);
-        button3.addActionListener(this);
         offset = 40;
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -33,7 +29,7 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         t1.setText("0");
         t2.setText("0");
         t3.setText("8");
-        t4.setText("8");
+        // t4.setText("8");
         add(t1);
         add(t2);
         add(t3);
@@ -48,16 +44,13 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
             } else if (offset - 1 > 0) {
                 offset = offset - 1;
             }
-        } else if (e.getSource() == button2) {
+        } else {
             if (offset < 10) {
                 offset = 10;
             } else if (offset + 10 <= 80) {
                 offset = offset + 10;
             }
             System.out.println("Zoom in is pressed");
-        } else {
-            System.out.print("Toggle button is pressed");
-            flameon = !flameon;
         }
         repaint();
     }
@@ -108,17 +101,7 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         repaint();
     }
 
-    void drawCandle(Graphics g, int height, int width, int x, int y) {
-        Color c = Color.gray;
-        while (height >= 0) {
-            for (int i = 0; i <= width; i++) {
-                plotPoint(x + i, y - height, c, g);
-            }
-            height -= 1;
-        }
-    }
-
-    public void paint(Graphics g) {
+    public void plotgrid(Graphics g) {
         originX = (getX() + getWidth()) / 2;
         originY = (getY() + getHeight()) / 2;
         g.setColor(Color.red);
@@ -167,68 +150,68 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
             }
             xCoord--;
         }
-        int x1, y1;
+    }
+
+    public void paint(Graphics g) {
+        plotgrid(g);
+        int x1, y1, x2, y2;
         x1 = Integer.parseInt(t1.getText());
         y1 = Integer.parseInt(t2.getText());
-        int height = Integer.parseInt(t3.getText());
-        int width = Integer.parseInt(t4.getText());
+        x2 = Integer.parseInt(t3.getText());
+        y2 = Integer.parseInt(t4.getText());
         // System.out.println("Enter 2 endpoints of the line segment");
         // x1 = sc.nextInt();
         // y1 = sc.nextInt();
         // x2 = sc.nextInt();
-        // y2 = sc.nextInt()
-        drawCandle(g, height, width, x1, y1);
-        if (flameon) {
-            lightCandle(g, height, width, x1, y1);
-        }
-    }
+        // y2 = sc.nextInt();
+        drawcircle(g, 100, 0, 0);
 
-    void lightCandle(Graphics g, int height, int width, int x, int y) {
-        int centrex = x + width / 2;
-        Color c = Color.red;
-        int maxheight = height / 2;
-        if (width >= height || height - width < maxheight) {
-            maxheight = height;
-        }
-        int i = 1;
-        int x1, y1;
-        x1 = centrex;
-        y1 = y;
-        int px = 1;
-        int py = 2;
-        int p = -1;
-        while (true) {
-            x1 = x1 + px;
-            y1 = y1 + py;
-            if (x1 >= x + width) {
-
-                px = -1;
-            }
-            if (px > 0) {
-                p = p + 1;
-            } else {
-                p = p - 1;
-            }
-            int j = 2 * centrex - x1;
-            while (j <= x1) {
-                drawline(j, y1, centrex, y, g);
-                if (y1 != maxheight) {
-                    drawline(j - 1, y1, centrex, y, g);
-                    drawline(j + 1, y1, centrex, y, g);
-                }
-                j += 1;
-                System.out.println(j + " " + x1 + " " + y1);
-            }
-            if (x1 == centrex) {
-                break;
-            }
-            i += 1;
-        }
+        drawcircle(g, 46, 46, 27);
+        drawcircle(g, 46, -46, 27);
+        drawcircle(g, 46, 0, -54);
+        drawcircle(g, 100, 0, 0);
+        drawcircle(g, 8, 0, 0);
+        drawcircle(g, 22, 0, 78);
+        drawcircle(g, 22, 65, -38);
+        drawcircle(g, 22, -65, -38);
+        drawcircle(g, 10, 33, 82);
+        drawcircle(g, 10, -33, 82);
+        drawcircle(g, 10, 88, -14);
+        drawcircle(g, 10, -88, -14);
+        drawcircle(g, 10, -54, -70);
+        drawcircle(g, 10, 54, -70);
+        drawcircle(g, 5, 50, 80);
+        drawcircle(g, 5, -50, 80);
+        drawcircle(g, 6, 94, 3);
+        drawcircle(g, 6, -94, 3);
+        drawcircle(g, 6, 45, -83);
+        drawcircle(g, 6, -45, -83);
+        drawcircle(g, 4, 58, 76);
+        drawcircle(g, 4, -58, 76);
+        drawcircle(g, 3, 95, 14);
+        drawcircle(g, 3, -95, 14);
+        drawcircle(g, 3, 36, -88);
+        drawcircle(g, 3, -36, -88);
+        drawcircle(g, 4, 0, 50);
+        drawcircle(g, 4, 42, -24);
+        drawcircle(g, 4, -42, -24);
+        drawcircle(g, 2, 65, 72);
+        drawcircle(g, 2, -65, 72);
+        drawcircle(g, 3, 95, 22);
+        drawcircle(g, 3, -95, 22);
+        drawcircle(g, 2, 31, -92);
+        drawcircle(g, 2, -31, -92);
+        drawcircle(g, 4, 23, 92);
+        drawcircle(g, 4, -23, 92);
+        drawcircle(g, 4, 91, -30);
+        drawcircle(g, 4, -91, -30);
+        drawcircle(g, 4, 69, -64);
+        drawcircle(g, 4, -69, -64);
     }
 
     public void plotPoint(int x, int y, Color c, Graphics g) {
         g.setColor(c);
-        int incradius = 100;
+        int incradius = 20;
         g.fillOval(originX + x * offset - (offset + incradius) / 8, originY - y * (offset) - (offset + incradius) / 8,
                 (offset + incradius) / 4, (offset + incradius) / 4);
     }
@@ -253,15 +236,55 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         for (i = 0; i <= n; i++) {
             x = x1 + i * stepx;
             y = y1 + i * stepy;
-            if (i < n / 3) {
-                plotPoint((int) Math.round(x), (int) Math.round(y), Color.red, g);
-            } else if (i >= n / 3 && i < 2 * n / 3) {
-                plotPoint((int) Math.round(x), (int) Math.round(y), Color.orange, g);
-            } else {
-                plotPoint((int) Math.round(x), (int) Math.round(y), Color.yellow, g);
-            }
+            plotPoint((int) Math.round(x), (int) Math.round(y), Color.yellow, g);
         }
 
     }
 
+    public void drawcircle(Graphics g, int r, int x_centre, int y_centre) {
+        int x = r;
+        int y = 0;
+        int p = 1 - r;
+        while (x > y) {
+            y++;
+            // Mid-point is inside or on the perimeter
+            if (p <= 0)
+                p = p + 2 * y + 1;
+
+            // Mid-point is outside the perimeter
+            else {
+                x--;
+                p = p + 2 * y - 2 * x + 1;
+            }
+            if (x < y) {
+                break;
+            }
+
+            // Printing the generated point and its
+            // reflection in the other octants after
+            // translation
+            plotPoint((x + x_centre), (y + y_centre), Color.blue, g);
+
+            plotPoint((-x + x_centre), (y + y_centre), Color.blue, g);
+
+            plotPoint((x + x_centre), (-y + y_centre), Color.blue, g);
+
+            plotPoint((-x + x_centre), (-y + y_centre), Color.blue, g);
+
+            // If the generated point is on the
+            // line x = y then the perimeter points
+            // have already been printed
+            if (x != y) {
+
+                plotPoint((y + x_centre), (x + y_centre), Color.BLUE, g);
+
+                plotPoint((-y + x_centre), (x + y_centre), Color.blue, g);
+
+                plotPoint((y + x_centre), (-x + y_centre), Color.blue, g);
+
+                plotPoint((-y + x_centre), (-x + y_centre), Color.blue, g);
+            }
+
+        }
+    }
 }

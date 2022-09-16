@@ -1,1 +1,0 @@
-this.setSize(new Dimension(1920, 1080));

@@ -1,10 +1,9 @@
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Random;
 
-public class light extends Applet implements MouseListener, MouseMotionListener, ActionListener {
-    public Button button1, button2, button3;
+public class ellipse extends Applet implements MouseListener, MouseMotionListener, ActionListener {
+    public Button button1, button2;
     public int offset;
     public int originX;
     public int originY;
@@ -17,9 +16,6 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         button2 = new Button("Zoom in");
         add(button2);
         button2.addActionListener(this);
-        button3 = new Button("Toggle flame");
-        add(button3);
-        button3.addActionListener(this);
         offset = 40;
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -33,7 +29,7 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         t1.setText("0");
         t2.setText("0");
         t3.setText("8");
-        t4.setText("8");
+        // t4.setText("8");
         add(t1);
         add(t2);
         add(t3);
@@ -48,16 +44,13 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
             } else if (offset - 1 > 0) {
                 offset = offset - 1;
             }
-        } else if (e.getSource() == button2) {
+        } else {
             if (offset < 10) {
                 offset = 10;
             } else if (offset + 10 <= 80) {
                 offset = offset + 10;
             }
             System.out.println("Zoom in is pressed");
-        } else {
-            System.out.print("Toggle button is pressed");
-            flameon = !flameon;
         }
         repaint();
     }
@@ -108,17 +101,7 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         repaint();
     }
 
-    void drawCandle(Graphics g, int height, int width, int x, int y) {
-        Color c = Color.gray;
-        while (height >= 0) {
-            for (int i = 0; i <= width; i++) {
-                plotPoint(x + i, y - height, c, g);
-            }
-            height -= 1;
-        }
-    }
-
-    public void paint(Graphics g) {
+    public void plotgrid(Graphics g) {
         originX = (getX() + getWidth()) / 2;
         originY = (getY() + getHeight()) / 2;
         g.setColor(Color.red);
@@ -167,68 +150,26 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
             }
             xCoord--;
         }
-        int x1, y1;
+    }
+
+    public void paint(Graphics g) {
+        plotgrid(g);
+        int x1, y1, x2, y2;
         x1 = Integer.parseInt(t1.getText());
         y1 = Integer.parseInt(t2.getText());
-        int height = Integer.parseInt(t3.getText());
-        int width = Integer.parseInt(t4.getText());
+        x2 = Integer.parseInt(t3.getText());
+        y2 = Integer.parseInt(t4.getText());
         // System.out.println("Enter 2 endpoints of the line segment");
         // x1 = sc.nextInt();
         // y1 = sc.nextInt();
         // x2 = sc.nextInt();
-        // y2 = sc.nextInt()
-        drawCandle(g, height, width, x1, y1);
-        if (flameon) {
-            lightCandle(g, height, width, x1, y1);
-        }
-    }
-
-    void lightCandle(Graphics g, int height, int width, int x, int y) {
-        int centrex = x + width / 2;
-        Color c = Color.red;
-        int maxheight = height / 2;
-        if (width >= height || height - width < maxheight) {
-            maxheight = height;
-        }
-        int i = 1;
-        int x1, y1;
-        x1 = centrex;
-        y1 = y;
-        int px = 1;
-        int py = 2;
-        int p = -1;
-        while (true) {
-            x1 = x1 + px;
-            y1 = y1 + py;
-            if (x1 >= x + width) {
-
-                px = -1;
-            }
-            if (px > 0) {
-                p = p + 1;
-            } else {
-                p = p - 1;
-            }
-            int j = 2 * centrex - x1;
-            while (j <= x1) {
-                drawline(j, y1, centrex, y, g);
-                if (y1 != maxheight) {
-                    drawline(j - 1, y1, centrex, y, g);
-                    drawline(j + 1, y1, centrex, y, g);
-                }
-                j += 1;
-                System.out.println(j + " " + x1 + " " + y1);
-            }
-            if (x1 == centrex) {
-                break;
-            }
-            i += 1;
-        }
+        // y2 = sc.nextInt();
+        drawellipse(g, x1, y1, x2, y2);
     }
 
     public void plotPoint(int x, int y, Color c, Graphics g) {
         g.setColor(c);
-        int incradius = 100;
+        int incradius = 20;
         g.fillOval(originX + x * offset - (offset + incradius) / 8, originY - y * (offset) - (offset + incradius) / 8,
                 (offset + incradius) / 4, (offset + incradius) / 4);
     }
@@ -253,15 +194,73 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         for (i = 0; i <= n; i++) {
             x = x1 + i * stepx;
             y = y1 + i * stepy;
-            if (i < n / 3) {
-                plotPoint((int) Math.round(x), (int) Math.round(y), Color.red, g);
-            } else if (i >= n / 3 && i < 2 * n / 3) {
-                plotPoint((int) Math.round(x), (int) Math.round(y), Color.orange, g);
-            } else {
-                plotPoint((int) Math.round(x), (int) Math.round(y), Color.yellow, g);
-            }
+            plotPoint((int) Math.round(x), (int) Math.round(y), Color.yellow, g);
         }
 
     }
 
+    public void drawellipse(Graphics g, int rx, int ry, int xc, int yc) {
+        float dx, dy, d1, d2, x, y;
+        x = 0;
+        y = ry;
+
+        // Initial decision parameter of region 1
+        d1 = (ry * ry) - (rx * rx * ry) +
+                (0.25f * rx * rx);
+        dx = 2 * ry * ry * x;
+        dy = 2 * rx * rx * y;
+        Color c = Color.yellow;
+        // For region 1
+        while (dx < dy) {
+
+            // Print points based on 4-way symmetry
+            plotPoint((int) (x + xc), (int) (y + yc), c, g);
+            plotPoint((int) (-x + xc), (int) (y + yc), c, g);
+            plotPoint((int) ((x + xc)), (int) ((-y + yc)), c, g);
+            plotPoint((int) ((-x + xc)), (int) ((-y + yc)), c, g);
+
+            // Checking and updating value of
+            // decision parameter based on algorithm
+            if (d1 < 0) {
+                x++;
+                dx = dx + (2 * ry * ry);
+                d1 = d1 + dx + (ry * ry);
+            } else {
+                x++;
+                y--;
+                dx = dx + (2 * ry * ry);
+                dy = dy - (2 * rx * rx);
+                d1 = d1 + dx - dy + (ry * ry);
+            }
+        }
+
+        // Decision parameter of region 2
+        d2 = ((ry * ry) * ((x + 0.5f) * (x + 0.5f)))
+                + ((rx * rx) * ((y - 1) * (y - 1)))
+                - (rx * rx * ry * ry);
+
+        // Plotting points of region 2
+        while (y >= 0) {
+
+            // printing points based on 4-way symmetry
+            plotPoint((int) ((x + xc)), (int) ((y + yc)), c, g);
+            plotPoint((int) ((-x + xc)), (int) ((y + yc)), c, g);
+            plotPoint((int) ((x + xc)), (int) ((-y + yc)), c, g);
+            plotPoint((int) ((-x + xc)), (int) ((-y + yc)), c, g);
+
+            // Checking and updating parameter
+            // value based on algorithm
+            if (d2 > 0) {
+                y--;
+                dy = dy - (2 * rx * rx);
+                d2 = d2 + (rx * rx) - dy;
+            } else {
+                y--;
+                x++;
+                dx = dx + (2 * ry * ry);
+                dy = dy - (2 * rx * rx);
+                d2 = d2 + dx - dy + (rx * rx);
+            }
+        }
+    }
 }
