@@ -1,7 +1,6 @@
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Random;
 
 public class light extends Applet implements MouseListener, MouseMotionListener, ActionListener {
     public Button button1, button2, button3;
@@ -9,6 +8,7 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
     public int originX;
     public int originY;
     protected TextField t1, t2, t3, t4;
+    boolean flameon;
 
     public void init() {
         button1 = new Button("Zoom out");
@@ -38,6 +38,7 @@ public class light extends Applet implements MouseListener, MouseMotionListener,
         add(t2);
         add(t3);
         add(t4);
+        flameon = true;
     }
 
     public void actionPerformed(ActionEvent e) {
