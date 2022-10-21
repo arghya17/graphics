@@ -4,6 +4,9 @@ import draw.*;
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
+// import com.computer_graphics.*;
+// import animal.features.*;
+// import animal.bodyParts.*;
 
 public class mouse extends Applet implements MouseListener, MouseMotionListener, ActionListener {
     public Button button1, button2;
@@ -11,6 +14,7 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
     public int originX;
     public int originY;
     protected TextField t1, t2;
+    // public PointPlotter p;
     public draw obj;
 
     public void init() {
@@ -36,6 +40,7 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         obj.originX = originX;
         obj.originY = originY;
         obj.offset = offset;
+        // p = new PointPlotter(g, offset, new int[] { originX, originY }, 120);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -54,6 +59,7 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
             }
             System.out.println("Zoom in is pressed");
         }
+        System.out.println(offset + "main");
         update();
         repaint();
     }
@@ -68,6 +74,9 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
     }
 
     public void update() {
+        // p.offset = offset;
+        // p.originX = originX;
+        // p.originY = originY;
         obj.offset = offset;
         obj.originX = originX;
         obj.originY = originY;
@@ -93,6 +102,7 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
             }
 
         }
+        update();
         repaint();
     }
 
@@ -118,7 +128,48 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
     }
 
     public void beak(int choice_beak, int radius, int x_centre, int y_centre, Graphics g) {
-
+        // 1: small beak without teeth
+        // 2: smalll beak with teeth
+        // 3: large beak without teeth
+        // 4: large beak with teeth
+        int pivot_x, pivot_y;
+        int x1, y1, x2, y2, x3, y3, x4, y4;
+        x1 = x_centre - (int) (radius * Math.cos(convert_to_radian(10)));
+        y1 = y_centre + (int) (radius * Math.sin(convert_to_radian(10)));
+        x2 = x_centre - (int) ((radius * Math.cos(convert_to_radian(35))));
+        y2 = y_centre + (int) (radius * Math.sin(convert_to_radian(35)));
+        x3 = x_centre - (int) (radius * Math.cos(convert_to_radian(10)));
+        y3 = y_centre - (int) (radius * Math.sin(convert_to_radian(10)));
+        x4 = x_centre - (int) ((radius * Math.cos(convert_to_radian(35))));
+        y4 = y_centre - (int) (radius * Math.sin(convert_to_radian(35)));
+        pivot_y = y1;
+        pivot_x = x1 - (int) (radius * 0.7);
+        if (choice_beak <= 2) {
+            obj.drawline(x1, y1, pivot_x, pivot_y, g);
+            obj.drawline(x2, y2, pivot_x, pivot_y, g);
+            if (choice_beak % 2 == 0) {
+                tooth(pivot_x, pivot_y, x1, y1, radius, -1, g);
+            }
+            pivot_y = y3;
+            obj.drawline(x3, y3, pivot_x, pivot_y, g);
+            obj.drawline(x4, y4, pivot_x, pivot_y, g);
+            if (choice_beak % 2 == 0) {
+                tooth(pivot_x + 3, pivot_y, x3, y3, radius, 1, g);
+            }
+        } else {
+            pivot_x = x1 - (int) (radius * 1.5);
+            obj.drawline(x1, y1, pivot_x, pivot_y, g);
+            obj.drawline(x2, y2, pivot_x, pivot_y, g);
+            if (choice_beak % 2 == 0) {
+                tooth(pivot_x, pivot_y, x1, y1, radius, -1, g);
+            }
+            pivot_y = y3;
+            obj.drawline(x3, y3, pivot_x, pivot_y, g);
+            obj.drawline(x4, y4, pivot_x, pivot_y, g);
+            if (choice_beak % 2 == 0) {
+                tooth(pivot_x + 3, pivot_y, x3, y3, radius, 1, g);
+            }
+        }
     }
 
     public void ear(int choice_ear, int radius, int x_centre, int y_centre, Graphics g) {
@@ -156,6 +207,15 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         }
     }
 
+    public void tooth(int x1, int y1, int x2, int y2, int radius, int up, Graphics g) {
+        // x1, y1 is smaller
+        // up=+1 or -1
+        while (x1 <= x2) {
+            obj.drawline(x1, y1, x1, y1 + (int) ((radius / 10) * up), g);
+            x1 = x1 + 5;
+        }
+    }
+
     public void head(int radius, int x_centre, int y_centre, int choice_beak, int choice_ear, Graphics g) {
         obj.drawcircle(radius, x_centre, y_centre, g);
         // head
@@ -163,6 +223,7 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         // eye
         obj.drawcircle(eye_r, x_centre - eye_r, y_centre + eye_r / 2, g);
         ear(choice_ear, radius / 5, x_centre + radius, y_centre + radius, g);
+        beak(choice_beak, radius, x_centre, y_centre, g);
     }
 
     public void paint(Graphics g) {
@@ -170,6 +231,10 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         int x1 = Integer.parseInt(t1.getText());
         int y1 = Integer.parseInt(t2.getText());
         // obj.plotPoint(x1, y1, Color.BLUE, g);
-        head(20, x1, y1, 1, 2, g);
+        head(20, x1, y1, 4, 2, g);
+        // p = new PointPlotter(g, offset, new int[] { originX, originY }, 120);
+        // body(originX, originY, 19, 29, SpotType.SPOTLESS, HairType.HAIRLESS, null,
+        // g);
+        // p.plotPoint(0,0);
     }
 }
