@@ -113,12 +113,45 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         repaint();
     }
 
+    double convert_to_radian(double angle) {
+        return Math.PI * angle / 180;
+    }
+
+    public void beak(int choice_beak, int radius, int x_centre, int y_centre, Graphics g) {
+
+    }
+
     public void ear(int choice_ear, int radius, int x_centre, int y_centre, Graphics g) {
         // 1: triangle ear
         // 2: circle ear
+        int pivot_x, pivot_y;
+        int x1, y1, x2, y2;
         switch (choice_ear) {
             case 1:
-                obj.drawcircle(radius, x_centre + radius, y_centre + radius, g);
+                x1 = x_centre - 5 * radius;
+                y1 = y_centre - 5 * radius;
+                x2 = x1;
+                y2 = y1;
+                x1 = x1 + (int) (5 * radius * Math.cos(convert_to_radian(5)));
+                y1 = y1 + (int) (5 * radius * Math.sin(convert_to_radian(5)));
+                x2 = x2 + (int) (5 * radius * Math.cos(convert_to_radian(55)));
+                y2 = y2 + (int) (5 * radius * Math.sin(convert_to_radian(55)));
+                pivot_x = (int) (x1 + 3 * x2) / 2;
+                pivot_y = y_centre + radius;
+                obj.drawline(x1, y1, pivot_x, pivot_y, g);
+                obj.drawline(x2, y2, pivot_x, pivot_y, g);
+                x1 = x_centre - 5 * radius;
+                y1 = y_centre - 5 * radius;
+                x1 = x1 - (int) (5 * radius * Math.cos(convert_to_radian(75)));
+                y1 = y1 + (int) (5 * radius * Math.sin(convert_to_radian(75)));
+                pivot_x = (int) (x1 + x2) / 2;
+                pivot_y = pivot_y + (int) 2 * radius;
+                obj.drawline(x1, y1, pivot_x, pivot_y, g);
+                obj.drawline(x2, y2, pivot_x, pivot_y, g);
+                break;
+            default:
+                obj.drawcircle(radius + radius / 4, x_centre - radius, y_centre - radius, g);
+                obj.drawcircle(radius + radius / 2, x_centre + radius, (int) (y_centre - 2 * radius), g);
                 break;
         }
     }
@@ -127,8 +160,9 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         obj.drawcircle(radius, x_centre, y_centre, g);
         // head
         int eye_r = (int) (radius / 4);
-        obj.drawcircle(eye_r, x_centre - eye_r / 2, y_centre - eye_r / 2, g);
-        ear(choice_ear, radius / 10, x_centre + radius, y_centre + radius, g);
+        // eye
+        obj.drawcircle(eye_r, x_centre - eye_r, y_centre + eye_r / 2, g);
+        ear(choice_ear, radius / 5, x_centre + radius, y_centre + radius, g);
     }
 
     public void paint(Graphics g) {
@@ -136,6 +170,6 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         int x1 = Integer.parseInt(t1.getText());
         int y1 = Integer.parseInt(t2.getText());
         // obj.plotPoint(x1, y1, Color.BLUE, g);
-        head(10, x1, y1, 1, 1, g);
+        head(20, x1, y1, 1, 2, g);
     }
 }
