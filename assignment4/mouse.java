@@ -4,9 +4,9 @@ import draw.*;
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
-// import com.computer_graphics.*;
-// import animal.features.*;
-// import animal.bodyParts.*;
+import com.computer_graphics.*;
+import animal.features.*;
+import animal.bodyParts.*;
 
 public class mouse extends Applet implements MouseListener, MouseMotionListener, ActionListener {
     public Button button1, button2;
@@ -14,7 +14,7 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
     public int originX;
     public int originY;
     protected TextField t1, t2;
-    // public PointPlotter p;
+    public PointPlotter p;
     public draw obj;
 
     public void init() {
@@ -27,9 +27,10 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         offset = 40;
         addMouseListener(this);
         addMouseMotionListener(this);
+
+        this.setSize(new Dimension(1920, 980));
         originX = (getX() + getWidth()) / 2;
         originY = (getY() + getHeight()) / 2;
-        this.setSize(new Dimension(1920, 980));
         t1 = new TextField("10");
         t2 = new TextField("10");
         t1.setText("0");
@@ -74,12 +75,14 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
     }
 
     public void update() {
-        // p.offset = offset;
-        // p.originX = originX;
-        // p.originY = originY;
+        originX = (getX() + getWidth()) / 2;
+        originY = (getY() + getHeight()) / 2;
         obj.offset = offset;
         obj.originX = originX;
         obj.originY = originY;
+        p.offset = obj.offset;
+        p.originX = obj.originX;
+        p.originY = obj.originY;
     }
 
     public void mousePressed(MouseEvent m) {
@@ -230,11 +233,14 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         obj.plotgrid(getX(), getY(), getWidth(), getHeight(), g);
         int x1 = Integer.parseInt(t1.getText());
         int y1 = Integer.parseInt(t2.getText());
-        // obj.plotPoint(x1, y1, Color.BLUE, g);
+        obj.plotPoint(10, 10, Color.BLUE, g);
         head(20, x1, y1, 4, 2, g);
-        // p = new PointPlotter(g, offset, new int[] { originX, originY }, 120);
+        p = new PointPlotter(g, offset, new int[] { originX, originY }, 120);
         // body(originX, originY, 19, 29, SpotType.SPOTLESS, HairType.HAIRLESS, null,
         // g);
-        // p.plotPoint(0,0);
+        System.out.println(originX + " main " + originY);
+        update();
+        p.setColor(Color.yellow);
+        p.plotPoint(10, 10);
     }
 }
