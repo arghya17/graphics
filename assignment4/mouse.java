@@ -13,7 +13,7 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
     public int offset;
     public int originX;
     public int originY;
-    protected TextField t1, t2;
+    protected TextField t1, t2, t3;
     public PointPlotter p;
     public draw obj;
 
@@ -33,10 +33,13 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         originY = (getY() + getHeight()) / 2;
         t1 = new TextField("10");
         t2 = new TextField("10");
+        t3 = new TextField("20");
+        t3.setText("40");
         t1.setText("0");
         t2.setText("0");
         add(t1);
         add(t2);
+        add(t3);
         obj = new draw();
         obj.originX = originX;
         obj.originY = originY;
@@ -234,12 +237,15 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         int x1 = Integer.parseInt(t1.getText());
         int y1 = Integer.parseInt(t2.getText());
         // obj.plotPoint(10, 10, Color.BLUE, g);
-        head(20, x1, y1, 4, 2, g);
+        int radius = Integer.parseInt(t3.getText());
         p = new PointPlotter(g, offset, new int[] { originX, originY }, 120);
         update();
-        Rotator rt = new Rotator(0, 0, 0);
-        Body obj1 = new Body(p, 0, 0, 20, 10, SpotType.SPOTLESS, HairType.HAIRLESS, rt);
+        p.setColor(Color.BLUE);
+        Rotator rt = new Rotator(x1, y1, 90);
+        Body obj1 = new Body(p, x1, y1, radius, (int) radius / 2, SpotType.SPOTLESS, HairType.HAIRLESS, rt);
+        head(radius / 2, x1, y1 + 3 * radius / 2, 4, 2, g);
         // System.out.println(originX + " main " + originY);
+
         // p.setColor(Color.yellow);
         // p.plotPoint(10, 10);
     }
