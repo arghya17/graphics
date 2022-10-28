@@ -22,13 +22,14 @@ public class PointPlotter {
 
     public void plotPoint(int x, int y) {
         int incradius = 20;
-        System.out.println(
-                offset + " pointPlotter" + x + "x " + y + " y " + originX + " originX " + originY + " originY ");
+        // System.out.println(
+        // offset + " pointPlotter" + x + "x " + y + " y " + originX + " originX " +
+        // originY + " originY ");
         int x1 = originX + x * offset - (offset + incradius) / 8;
         int y1 = originY - y * (offset) - (offset + incradius) / 8;
         g.fillOval(x1, y1,
                 (offset + incradius) / 4, (offset + incradius) / 4);
-        System.out.println(x1 + "  " + y1 + " pointPlotter");
+        // System.out.println(x1 + " " + y1 + " pointPlotter");
     }
 
     public void plotPoint(int[] arr) {

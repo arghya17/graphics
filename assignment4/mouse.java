@@ -60,7 +60,7 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
             }
             System.out.println("Zoom in is pressed");
         }
-        System.out.println(offset + "main");
+        // System.out.println(offset + "main");
         update();
         repaint();
     }
@@ -233,14 +233,14 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         obj.plotgrid(getX(), getY(), getWidth(), getHeight(), g);
         int x1 = Integer.parseInt(t1.getText());
         int y1 = Integer.parseInt(t2.getText());
-        obj.plotPoint(10, 10, Color.BLUE, g);
+        // obj.plotPoint(10, 10, Color.BLUE, g);
         head(20, x1, y1, 4, 2, g);
         p = new PointPlotter(g, offset, new int[] { originX, originY }, 120);
         update();
         Rotator rt = new Rotator(0, 0, 0);
-        Body obj = new Body(p, 0, 0, 20, 10, SpotType.SPOTLESS, HairType.HAIRLESS, rt);
-        System.out.println(originX + " main " + originY);
-        p.setColor(Color.yellow);
-        p.plotPoint(10, 10);
+        Body obj1 = new Body(p, 0, 0, 20, 10, SpotType.SPOTLESS, HairType.HAIRLESS, rt);
+        // System.out.println(originX + " main " + originY);
+        // p.setColor(Color.yellow);
+        // p.plotPoint(10, 10);
     }
 }

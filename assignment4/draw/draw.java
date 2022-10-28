@@ -63,15 +63,16 @@ public class draw {
     public void plotPoint(int x, int y, Color c, Graphics g) {
         g.setColor(c);
         int incradius = 20;
-        if (x == 10 && y == 10)
-            System.out.println(
-                    offset + " plotPoint" + x + "x " + y + " y " + originX + " originX " + originY + " originY ");
+        // if (x == 10 && y == 10)
+        // System.out.println(
+        // offset + " plotPoint" + x + "x " + y + " y " + originX + " originX " +
+        // originY + " originY ");
         int x1 = originX + x * offset - (offset + incradius) / 8;
         int y1 = originY - y * (offset) - (offset + incradius) / 8;
         g.fillOval(x1, y1,
                 (offset + incradius) / 4, (offset + incradius) / 4);
-        if (x == 10 && y == 10)
-            System.out.println(x1 + " Plotpoint " + y1);
+        // if (x == 10 && y == 10)
+        // System.out.println(x1 + " Plotpoint " + y1);
 
     }
 
