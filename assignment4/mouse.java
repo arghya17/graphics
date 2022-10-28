@@ -236,10 +236,10 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         obj.plotPoint(10, 10, Color.BLUE, g);
         head(20, x1, y1, 4, 2, g);
         p = new PointPlotter(g, offset, new int[] { originX, originY }, 120);
-        // body(originX, originY, 19, 29, SpotType.SPOTLESS, HairType.HAIRLESS, null,
-        // g);
-        System.out.println(originX + " main " + originY);
         update();
+        Rotator rt = new Rotator(0, 0, 0);
+        Body obj = new Body(p, 0, 0, 20, 10, SpotType.SPOTLESS, HairType.HAIRLESS, rt);
+        System.out.println(originX + " main " + originY);
         p.setColor(Color.yellow);
         p.plotPoint(10, 10);
     }
