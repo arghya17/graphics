@@ -26,9 +26,9 @@ public class MovableParts {
         int c22y = p2[1] - ry2;
         lowerHalf = new Body(p, c22x, c22y, rx2, ry2, st, ht, rt2);
         this.sz = sz;
-        p2[1] -=2*ry2;
-        p2=rt2.rotate(p2[0],p2[1]);
+        p2[1] -= 2 * ry2;
+        p2 = rt2.rotate(p2[0], p2[1]);
         rt.setAngle(0);
-        fist=new Body(p,p2[0]-8,p2[1],10,4,st,ht,rt);
+        fist = new Body(p, p2[0] - 8, p2[1], 10, 4, st, ht, rt);
     }
 }

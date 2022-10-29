@@ -242,8 +242,8 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         update();
         p.setColor(Color.BLUE);
         Rotator rt = new Rotator(x1, y1 + radius, 35);
-        new Body(p, x1, y1, radius / 2, radius, SpotType.SPOTTED, HairType.HAIRLESS, rt);
-        head(radius / 2, x1, y1 + 3 * radius / 2, 4, 2, g);
+        new Body(p, x1, y1, radius / 2, radius, SpotType.SPOTTED, HairType.HAIRLESS, rt);// body
+        head(radius / 2, x1, y1 + 3 * radius / 2, 4, 2, g);// ear
         int[] leg1p = rt.rotate(x1, y1 - radius);
         int[] leg2p = rt.rotate(x1 - 5, y1 - radius + 10);
         p.setColor(Color.BLUE);
