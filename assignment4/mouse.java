@@ -238,14 +238,31 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         int y1 = Integer.parseInt(t2.getText());
         // obj.plotPoint(10, 10, Color.BLUE, g);
         int radius = Integer.parseInt(t3.getText());
-        p = new PointPlotter(g, offset, new int[] { originX, originY }, 120);
+        p = new PointPlotter(g, offset, new int[] { originX, originY }, 10);
         update();
         p.setColor(Color.BLUE);
-        Rotator rt = new Rotator(x1, y1, 90);
-        Body obj1 = new Body(p, x1, y1, radius, (int) radius / 2, SpotType.SPOTLESS, HairType.HAIRLESS, rt);
+        Rotator rt = new Rotator(x1, y1 + radius, 35);
+        new Body(p, x1, y1, radius / 2, radius, SpotType.SPOTTED, HairType.HAIRLESS, rt);
         head(radius / 2, x1, y1 + 3 * radius / 2, 4, 2, g);
-        // System.out.println(originX + " main " + originY);
+        int[] leg1p = rt.rotate(x1, y1 - radius);
+        int[] leg2p = rt.rotate(x1 - 5, y1 - radius + 10);
+        p.setColor(Color.BLUE);
+        new MovableParts(p, leg1p[0], leg1p[1], radius / 3, 3 * radius / 2, SpotType.SPOTTED, HairType.HAIRLESS,
+                new int[] { 0, 5 });// leg1
+        new MovableParts(p, leg2p[0], leg2p[1], radius / 3, 3 * radius / 2, SpotType.SPOTTED, HairType.HAIRLESS,
+                new int[] { -20, 5 });// leg2
 
+        int[] hand1p = rt.rotate(x1 - radius / 2 + 10, y1 + radius / 2);
+        int[] hand2p = rt.rotate(x1 - radius / 2 + 10, y1 + radius / 2 + 10);
+        new MovableParts(p, hand1p[0], hand1p[1], radius / 4, radius, SpotType.SPOTTED, HairType.HAIRLESS,
+                new int[] { -45, -90 });// leg2
+        new MovableParts(p, hand2p[0], hand2p[1], radius / 4, radius, SpotType.SPOTTED, HairType.HAIRLESS,
+                new int[] { -75, -120 });// leg2
+
+        int[] tail = rt.rotate(x1 + 17, y1 - radius);
+        rt.setPivot(tail);
+        rt.setAngle(-10);
+        new Body(p, tail[0], tail[1], radius / 3, radius / 8, SpotType.SPOTLESS, HairType.HAIRY, rt);
         // p.setColor(Color.yellow);
         // p.plotPoint(10, 10);
     }
