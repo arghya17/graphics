@@ -357,6 +357,8 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         int[] leg1p = rt.rotate(x1, y1 - radius);
         int[] leg2p = rt.rotate(x1 - 5, y1 - radius + 10);
         p.setColor(Color.RED);
+        int radius1 = radius / 3;
+        int radius2 = 3 * radius / 2;
         new MovableParts(p, leg1p[0], leg1p[1], radius / 3, 3 * radius / 2, sp, h,
                 new int[] { 0, 5 });// leg1
         new MovableParts(p, leg2p[0], leg2p[1], radius / 3, 3 * radius / 2, sp, h,
@@ -365,9 +367,68 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         int[] hand1p = rt.rotate(x1 - radius / 2 + 10, y1 + radius / 2);
         int[] hand2p = rt.rotate(x1 - radius / 2 + 10, y1 + radius / 2 + 10);
         new MovableParts(p, hand1p[0], hand1p[1], radius / 4, radius, sp, h,
-                new int[] { -45, -90 });// leg2
+                new int[] { -45, -90 });// hand1
         new MovableParts(p, hand2p[0], hand2p[1], radius / 4, radius, sp, h,
-                new int[] { -75, -120 });// leg2
+                new int[] { -75, -120 });// hand2
+
+        int[] tail = rt.rotate(x1 + 17, y1 - radius);
+        rt.setPivot(tail);
+        rt.setAngle(-10);
+
+        new Body(p, tail[0], tail[1], radius / 3, radius / 8, sp, h, rt);
+    }
+
+    public void animal_draw(Graphics g, int x1, int y1, int radius, int spot, int hair, int choice_beak,
+            int choice_ear, int arm, int leg) {
+        p = new PointPlotter(g, offset, new int[] { originX, originY }, 10);
+        update();
+        SpotType sp = SpotType.SPOTTED;
+        HairType h = HairType.HAIRY;
+        if (spot == 0) {
+            sp = SpotType.SPOTLESS;
+        }
+        if (hair == 0) {
+            h = HairType.HAIRLESS;
+        }
+        p.setColor(Color.RED);
+        Rotator rt = new Rotator(x1, y1 + radius, 35);
+        Color c = Color.red;
+        new Body(p, x1, y1, radius / 2, radius, sp, h, rt);// body
+        head(radius / 2, x1, y1 + 3 * radius / 2, choice_beak, choice_ear, c, g);// ear
+        int[] leg1p = rt.rotate(x1, y1 - radius);
+        int[] leg2p = rt.rotate(x1 - 5, y1 - radius + 10);
+        p.setColor(Color.RED);
+        int radius1 = radius / 3;
+        int radius2 = 3 * radius / 2;
+        if (leg == 1) {
+            radius1 = radius / 4;
+            radius2 = radius;
+        }
+        if (leg == 3) {
+            radius1 = radius / 2;
+            radius2 = 5 * radius / 4;
+        }
+        new MovableParts(p, leg1p[0], leg1p[1], radius1, radius2, sp, h,
+                new int[] { 0, 5 });// leg1
+        new MovableParts(p, leg2p[0], leg2p[1], radius1, radius2, sp, h,
+                new int[] { -20, 5 });// leg2
+
+        int[] hand1p = rt.rotate(x1 - radius / 2 + 10, y1 + radius / 2);
+        int[] hand2p = rt.rotate(x1 - radius / 2 + 10, y1 + radius / 2 + 10);
+        radius1 = radius / 4;
+        radius2 = radius;
+        if (arm == 1) {
+            radius1 = radius / 6;
+            radius2 = radius / 2;
+        }
+        if (arm == 3) {
+            radius1 = radius / 3;
+            radius2 = 3 * radius / 2;
+        }
+        new MovableParts(p, hand1p[0], hand1p[1], radius1, radius2, sp, h,
+                new int[] { -45, -90 });// hand1
+        new MovableParts(p, hand2p[0], hand2p[1], radius1, radius2, sp, h,
+                new int[] { -75, -120 });// hand2
 
         int[] tail = rt.rotate(x1 + 17, y1 - radius);
         rt.setPivot(tail);
@@ -426,18 +487,23 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
         // 1: triangle ear
         // 2: circle ear
         int feature[][] = { { ThreadLocalRandom.current().nextInt(0, 2), ThreadLocalRandom.current().nextInt(0, 2),
-                ThreadLocalRandom.current().nextInt(1, 5), ThreadLocalRandom.current().nextInt(1, 3) },
+                ThreadLocalRandom.current().nextInt(1, 5), ThreadLocalRandom.current().nextInt(1, 3),
+                ThreadLocalRandom.current().nextInt(1, 4), ThreadLocalRandom.current().nextInt(1, 4) },
                 { ThreadLocalRandom.current().nextInt(0, 2), ThreadLocalRandom.current().nextInt(0, 2),
-                        ThreadLocalRandom.current().nextInt(1, 5), ThreadLocalRandom.current().nextInt(1, 3) } };
-        int[] feature1 = new int[4];
+                        ThreadLocalRandom.current().nextInt(1, 5), ThreadLocalRandom.current().nextInt(1, 3),
+                        ThreadLocalRandom.current().nextInt(1, 4), ThreadLocalRandom.current().nextInt(1, 4) } };
+        int[] feature1 = new int[6];
         int i;
         for (i = 0; i < 4; i++) {
             int choice = ThreadLocalRandom.current().nextInt(0, 2);
             feature1[i] = feature[choice][i];
         }
-        animal_draw(g, x1 - 200, y1, radius, feature[0][0], feature[0][1], feature[0][2], feature[0][3]);
-        animal_draw(g, x1, y1, radius, feature[1][0], feature[1][1], feature[1][2], feature[1][3]);
-        animal_draw(g, x1 + 200, y1, radius, feature1[0], feature1[1], feature1[2], feature1[3]);
+        animal_draw(g, x1 - 300, y1, radius, feature[0][0], feature[0][1], feature[0][2], feature[0][3], feature[0][4],
+                feature[0][5]);
+        animal_draw(g, x1, y1, radius, feature[1][0], feature[1][1], feature[1][2], feature[1][3], feature[1][4],
+                feature[1][5]);
+        animal_draw(g, x1 + 300, y1, radius, feature1[0], feature1[1], feature1[2], feature1[3], feature1[4],
+                feature1[5]);
 
     }
 }
