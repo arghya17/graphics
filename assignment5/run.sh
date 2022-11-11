@@ -1,4 +1,4 @@
 #!/bin/bash
 
 javac *.java
-appletviewer mouse.html
+appletviewer line_clipping.html
