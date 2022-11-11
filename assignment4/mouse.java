@@ -494,9 +494,15 @@ public class mouse extends Applet implements MouseListener, MouseMotionListener,
                         ThreadLocalRandom.current().nextInt(1, 4), ThreadLocalRandom.current().nextInt(1, 4) } };
         int[] feature1 = new int[6];
         int i;
-        for (i = 0; i < 4; i++) {
-            int choice = ThreadLocalRandom.current().nextInt(0, 2);
-            feature1[i] = feature[choice][i];
+        int choice = ThreadLocalRandom.current().nextInt(1, 6);
+        int p = 0;
+        for (i = 0; i < 6; i++) {
+            p = i / choice;
+            if (p > 1) {
+                p = 1;
+            }
+            System.out.println(p);
+            feature1[i] = feature[p][i];
         }
         animal_draw(g, x1 - 300, y1, radius, feature[0][0], feature[0][1], feature[0][2], feature[0][3], feature[0][4],
                 feature[0][5]);

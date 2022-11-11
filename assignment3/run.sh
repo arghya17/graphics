@@ -2,4 +2,4 @@
 
 javac *.java
 appletviewer gasket.html
-appletviewer ellipse.html
+appletviewer ellipse.html 
